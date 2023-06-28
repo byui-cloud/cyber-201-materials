@@ -1,1 +1,1 @@
-# cyber-201-materials
+# Cyber 201 student materials
