@@ -46,8 +46,8 @@ fi
 
 # Let the user pick the username to connect with
 read -p "Choose the SSH username option:
-1. ec2-user
-2. ubuntu
+1. ec2-user (For Amazon Linux)
+2. ubuntu (For Ubuntu Server)
 3. Enter a custom username
 Enter the number of your choice: " ssh_option
 
