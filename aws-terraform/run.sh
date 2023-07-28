@@ -68,8 +68,10 @@ case $ssh_option in
 esac
 
 echo "Connecting to the instance with IP: $selected_ip..."
+echo "Remember to turn everything off and delete it when you are done:"
+echo "logout of ther VM server: 'logout' and then run: 'terraform destroy --auto-approve'"
+echo "Delete the folder: 'rm -R byuieast' or run the terminate.sh script"
 read -p "Pausing for 45 seconds for the server to intialize." -t 45
-
 
 # Initiate SSH session to the selected instance
 ssh -i ../private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance

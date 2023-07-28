@@ -9,7 +9,30 @@ tfenv install
 tfenv use
 mkdir byuieast
 cd byuieast
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainawslinux.tf
+
+read -p "Choose the type of servers to deploy:
+1. AWS Linux Mate (RDP AND SSH)
+2. Ubuntu Server
+3. AWS Linux Mate and another VM with JuiceBox
+Enter the number of your choice: " tf_option
+
+case $tf_option in
+    1)
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainawslinux.tf"
+        ;;
+    2)
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainubuntu.tf"
+        ;;
+    3)
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox.tf"
+        ;;
+    *)
+        echo "Error: Invalid option. Please select a valid option."
+        exit 1
+        ;;
+esac
+
+curl -O $tf_file
 terraform init
 terraform apply -auto-approve
 
