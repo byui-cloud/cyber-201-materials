@@ -44,11 +44,35 @@ else
     selected_ip=$(awk -v num="$selected_num" 'NR == num {print $2}' <<< "$instances")
 fi
 
+# Let the user pick the username to connect with
+read -p "Choose the SSH username option:
+1. ec2-user
+2. ubuntu
+3. Enter a custom username
+Enter the number of your choice: " ssh_option
+
+case $ssh_option in
+    1)
+        ssh_username="ec2-user"
+        ;;
+    2)
+        ssh_username="ubuntu"
+        ;;
+    3)
+        read -p "Enter the custom username: " ssh_username
+        ;;
+    *)
+        echo "Error: Invalid option. Please select a valid SSH username option."
+        exit 1
+        ;;
+esac
+
 echo "Connecting to the instance with IP: $selected_ip..."
 read -p "Pausing for 45 seconds for the server to intialize." -t 45
 
+
 # Initiate SSH session to the selected instance
-ssh -i ../private_key.pem "ec2-user@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
+ssh -i ../private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
 
 
 
