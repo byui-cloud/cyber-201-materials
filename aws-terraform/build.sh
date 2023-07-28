@@ -7,6 +7,11 @@ mkdir ~/bin
 ln -s ~/.tfenv/bin/* ~/bin/
 tfenv install
 tfenv use
+
+# Next get the terminate.sh file to delete everything when done
+# Give execute permissions to this file: chmod a+x terminate.sh
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/terminate.sh && chmod a+x terminate.sh
+
 mkdir byuieast
 cd byuieast
 
