@@ -8,12 +8,12 @@ ln -s ~/.tfenv/bin/* ~/bin/
 tfenv install
 tfenv use
 
+mkdir byuieast
+cd byuieast
+
 # Next get the terminate.sh file to delete everything when done
 # Give execute permissions to this file: chmod a+x terminate.sh
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/terminate.sh && chmod a+x terminate.sh
-
-mkdir byuieast
-cd byuieast
 
 read -p "Choose the type of servers to deploy:
 1. AWS Linux Mate (RDP AND SSH)

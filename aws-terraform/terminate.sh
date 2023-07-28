@@ -3,5 +3,5 @@
 
 terraform destroy --auto-approve
 cd ..
-rm -R byuieast
+rm -R "byuieast/*"
 rm private_key.pem
