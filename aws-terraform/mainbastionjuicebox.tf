@@ -108,6 +108,8 @@ resource "aws_security_group" "bastion" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
     # Allow only the BYUI network to SSH in
     # cidr_blocks = ["157.201.0.0/16"]
   }
