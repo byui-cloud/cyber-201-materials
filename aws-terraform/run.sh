@@ -35,8 +35,7 @@ else
     read -p "Enter the number of the instance you want to SSH into: " selected_num
 
     # Validate if the entered number is within the range of instances
-    if ! [[ "$selected_num" =~ ^[1-$num_instances]$ ]]; then
-        echo "Error: Invalid selection. Please enter a number from the list."
+    if ! [[ "$selected_num" =~ ^[1-9][0-9]*$ ]] || [[ "$selected_num" -gt "$num_instances" ]]; then        echo "Error: Invalid selection. Please enter a number from the list."
         exit 1
     fi
 
