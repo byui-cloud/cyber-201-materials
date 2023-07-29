@@ -1,7 +1,7 @@
 #!/bin/bash
 # deletes the resources
 
-rm ../build.sh
+rm build.sh
 cd byuieast
 terraform destroy --auto-approve
 rm -R ../byuieast/
