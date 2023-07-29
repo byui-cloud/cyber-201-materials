@@ -72,7 +72,7 @@ echo "Remember to turn everything off and delete it when you are done:"
 echo "1 - Logout of the VM server: 'logout'"
 echo "2 - Run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve'"
 echo "Delete the folder: 'rm -R byuieast'"
-read -p "Pausing for 45 seconds for the server to intialize." -t 45
+read -p "Pausing for 45 seconds for the server to initialize." -t 45
 
 # Initiate SSH session to the selected instance
 ssh -i ../private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
