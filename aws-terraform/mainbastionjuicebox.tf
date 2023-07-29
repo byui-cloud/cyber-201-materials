@@ -109,7 +109,7 @@ resource "aws_security_group" "bastion" {
     to_port = 22
     protocol = "tcp"
     # Allow only the BYUI network to SSH in
-    cidr_blocks = ["157.201.0.0/16"]
+    # cidr_blocks = ["157.201.0.0/16"]
   }
   ingress {
     description = "RDP"
