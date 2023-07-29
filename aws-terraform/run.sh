@@ -69,8 +69,9 @@ esac
 
 echo "Connecting to the instance with IP: $selected_ip..."
 echo "Remember to turn everything off and delete it when you are done:"
-echo "logout of ther VM server: 'logout' and then run: 'terraform destroy --auto-approve'"
-echo "Delete the folder: 'rm -R byuieast' or run the terminate.sh script"
+echo "1 - Logout of ther VM server: 'logout'"
+echo "2 - run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve'"
+echo "Delete the folder: 'rm -R byuieast'"
 read -p "Pausing for 45 seconds for the server to intialize." -t 45
 
 # Initiate SSH session to the selected instance
