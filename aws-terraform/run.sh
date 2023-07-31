@@ -4,7 +4,7 @@
 # Connects via ssh with the key and asks the users which instance to connect to
 
 # Use describe-instances command to get all EC2 instances and the IP addresses
-instances=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId, PublicIpAddress]' --output text)
+instances=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId, PublicIpAddress, PrivateIpAddress]' --output text)
 
 if [[ -z "$instances" ]]; then
     echo "No EC2 instances found in your account."
@@ -17,6 +17,7 @@ num_instances=$(grep -c '' <<< "$instances")
 if [[ $num_instances -eq 1 ]]; then
     # If there is only one instance, automatically select it for SSH
     selected_ip=$(awk '{print $2}' <<< "$instances")
+    internal_ip=$(awk '{print $3}' <<< "$instances")
 else
     echo "Public IP addresses of all EC2 instances in your account:"
 
@@ -27,6 +28,9 @@ else
             echo "$i. Instance ID: $instance_id - No public IP address"
         else
             echo "$i. Instance ID: $instance_id - Public IP address: $ip_address"
+            echo "   Internal IP address (take note of this): $internal_ip"
+            echo "If using a bastion, connect to its public IP and then ssh into the internal IP"
+
         fi
         i=$((i+1))
     done <<< "$instances"
@@ -66,12 +70,14 @@ case $ssh_option in
         ;;
 esac
 
-echo "Connecting to the instance with IP: $selected_ip..."
+echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
 echo "Remember to turn everything off and delete it when you are done:"
 echo "1 - Logout of the VM server: 'logout'"
-echo "2 - Run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve'"
-echo "Delete the folder: 'rm -R byuieast'"
-read -p "Pausing for 45 seconds for the server to initialize." -t 45
+echo "2 - Run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve' and delete the folder: 'rm -R byuieast'"
+echo "For the Amazon Linx Mate with RDP, you have to enable RDP by setting the password once connected and rebuild the keys:"
+echo “sudo passwd ec2-user”
+echo “sudo openssl req -x509 -sha384 -newkey rsa:3072 -nodes -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
+read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run again after a minute." -t 45
 
 # Initiate SSH session to the selected instance
 ssh -i ../private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
