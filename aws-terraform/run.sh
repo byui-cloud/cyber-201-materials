@@ -35,7 +35,7 @@ else
     done <<< "$instances"
     echo "If using a bastion, connect to its public IP and then ssh into the internal IP of the other instance that does not have a public IP"
     # Prompt user to choose an instance by number
-    read -p "Enter the number of the instance you want to SSH into: " selected_num
+    read -p "Enter the number of the instance you want to SSH into (must have a public IP): " selected_num
 
     # Validate if the entered number is within the range of instances
     if ! [[ "$selected_num" =~ ^[1-9][0-9]*$ ]] || [[ "$selected_num" -gt "$num_instances" ]]; then        echo "Error: Invalid selection. Please enter a number from the list."
