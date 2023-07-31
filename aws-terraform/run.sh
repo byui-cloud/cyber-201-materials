@@ -28,8 +28,8 @@ else
             echo "$i. Instance ID: $instance_id - No public IP address"
         else
             echo "$i. Instance ID: $instance_id - Public IP address: $ip_address"
-            echo "   Internal IP address (take note of this): $internal_ip"
-            echo "If using a bastion, connect to its public IP and then ssh into the internal IP"
+            echo "Internal IP address (take note of it). $internal_ip"
+            echo "If using a bastion, connect to its public IP and then ssh into the internal IP of the other instance that does not have a public IP"
 
         fi
         i=$((i+1))

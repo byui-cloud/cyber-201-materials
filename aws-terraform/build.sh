@@ -47,7 +47,7 @@ terraform apply -auto-approve
 
 echo "Run ./terminate.sh when you are done to save your budget." 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
-read -n 1 -s -r -p $'\nPress any key to connect to the instance (./run.sh) or CTRL + C to stop...'
+read -n 1 -s -r -p $'\nPress any key to connect to the instance/VM (./run.sh) or CTRL + C to stop...'
 
 # Next run the run.sh file to connect to the servers
 # Give execute permissions to this file: chmod a+x run.sh
