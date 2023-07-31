@@ -4,7 +4,7 @@
 # Connects via ssh with the key and asks the users which instance to connect to
 
 # Use describe-instances command to get all EC2 instances and the IP addresses
-instances=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId, PublicIpAddress, PrivateIpAddress]' --output text)
+instances=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId, PublicIpAddress, PrivateIpAddress, Tags[?Key==`Name`].Value | [0]]' --output text)
 
 if [[ -z "$instances" ]]; then
     echo "No EC2 instances found in your account."
@@ -18,8 +18,9 @@ if [[ $num_instances -eq 1 ]]; then
     # If there is only one instance, automatically select it for SSH
     selected_ip=$(awk '{print $2}' <<< "$instances")
     internal_ip=$(awk '{print $3}' <<< "$instances")
+    host_name=$(awk '{print $4}' <<< "$instances")
 else
-    echo "Public IP addresses of all EC2 instances in your account:"
+    echo "IP addresses of all EC2 instances in your account (public IP, private IP, hostname):"
 
     # Print a list of instances with their public IP addresses
     i=1
@@ -27,14 +28,12 @@ else
         if [[ -z "$ip_address" ]]; then
             echo "$i. Instance ID: $instance_id - No public IP address"
         else
-            echo "$i. Instance ID: $instance_id - Public IP address: $ip_address"
-            echo "Internal IP address (take note of these). $internal_ip"
-            echo "If using a bastion, connect to its public IP and then ssh into the internal IP of the other instance that does not have a public IP"
-
+            echo "$i. Instance ID: $instance_id - Public IP address: $ip_address $internal_ip $host_name "
+            echo "Take a picture or note of these. "
         fi
         i=$((i+1))
     done <<< "$instances"
-
+    echo "If using a bastion, connect to its public IP and then ssh into the internal IP of the other instance that does not have a public IP"
     # Prompt user to choose an instance by number
     read -p "Enter the number of the instance you want to SSH into: " selected_num
 
