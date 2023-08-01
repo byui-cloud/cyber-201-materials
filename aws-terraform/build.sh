@@ -34,6 +34,7 @@ case $tf_option in
         ;;
     4)
         read -p "Enter the URL to a .tf file: " tf_file
+        # https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainredhat.tf
         ;;
     *)
         echo "Error: Invalid option. Please select a valid option."
@@ -45,10 +46,12 @@ curl -O $tf_file
 terraform init
 terraform apply -auto-approve
 
+# Download the script to connect via ssh and give execute permissions to this file: chmod a+x run.sh
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh && chmod a+x run.sh
+
 echo "Run ./terminate.sh when you are done to save your budget." 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
 read -n 1 -s -r -p $'\nPress any key to connect to the instance/VM (./run.sh) or CTRL + C to stop...'
 
 # Next run the run.sh file to connect to the servers
-# Give execute permissions to this file: chmod a+x run.sh
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh && chmod a+x run.sh && ./run.sh
+./run.sh
