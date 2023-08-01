@@ -33,8 +33,8 @@ case $tf_option in
         tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox.tf"
         ;;
     4)
+        echo "Look at some .tf files listed here: https://github.com/byui-cloud/cyber-201-materials/tree/main/aws-terraform"
         read -p "Enter the URL to a .tf file: " tf_file
-        # https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainredhat.tf
         ;;
     *)
         echo "Error: Invalid option. Please select a valid option."
