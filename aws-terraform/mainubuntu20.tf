@@ -48,13 +48,13 @@ resource "aws_security_group" "byuisg" {
 }
 
 # Create an EC2 instance Ubuntu Server 20.04 LTS
-resource "aws_instance" "ubuntu_host" {
+resource "aws_instance" "ubuntu20_host" {
   ami = "ami-0261755bbcb8c4a84"
   instance_type = "t2.micro"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.byuisg.id]
   associate_public_ip_address = "true"
   tags = {
-    Name = "ubuntu_host"
+    Name = "ubuntu20_host"
   }
 }

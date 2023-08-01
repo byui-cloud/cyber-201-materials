@@ -68,6 +68,6 @@ resource "aws_instance" "debian_host" {
   vpc_security_group_ids = [aws_security_group.byuisg.id]
   associate_public_ip_address = "true"
   tags = {
-    Name = "awslinx_host"
+    Name = "debian_host"
   }
 }

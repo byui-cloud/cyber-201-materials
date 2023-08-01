@@ -61,13 +61,13 @@ resource "aws_security_group" "byuisg" {
 }
 
 # Create an EC2 instance Microsoft Windows Server 2019 Base
-resource "aws_instance" "winserver_host" {
+resource "aws_instance" "winserver19_host" {
   ami = "ami-069c45f40acdfe41e"
   instance_type = "t2.micro"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.byuisg.id]
   associate_public_ip_address = "true"
   tags = {
-    Name = "awslinx_host"
+    Name = "winserver19_host"
   }
 }
