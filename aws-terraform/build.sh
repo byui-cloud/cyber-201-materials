@@ -34,7 +34,7 @@ case $tf_option in
         ;;
     4)
         echo "Look at some .tf files listed here: https://github.com/byui-cloud/cyber-201-materials/tree/main/aws-terraform"
-        echo "ex: https://byui-cloud.github.io/cyber-201-materials/aws-terraform/maindebian.tf"
+        echo "ex: https://byui-cloud.github.io/cyber-201-materials/aws-terraform/maindebian.tf (user: admin)"
         read -p "Enter the URL to a .tf file: " tf_file
         ;;
     *)
