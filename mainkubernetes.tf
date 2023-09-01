@@ -51,14 +51,14 @@ resource "aws_security_group" "byuisg" {
   }
 }
 
-# Create an EC2 instance Red Hat Enterprise Linux 9
-resource "aws_instance" "redhat_host" {
-  ami = "ami-026ebd4cfe2c043b2"
+# Create an EC2 instance AWS Linux with EKS (Elastic Kubernetes Service)
+resource "aws_instance" "eks_host" {
+  ami = "ami-0eeeef929db40543c"
   instance_type = "t2.micro"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.byuisg.id]
   associate_public_ip_address = "true"
   tags = {
-    Name = "redhat_host"
+    Name = "eks_host"
   }
 }

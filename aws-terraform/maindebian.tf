@@ -40,15 +40,6 @@ resource "aws_security_group" "byuisg" {
     # cidr_blocks = ["157.201.0.0/16"]
     cidr_blocks = ["0.0.0.0/0"]
   }
-    ingress {
-    description = "RDP"
-    from_port = 3389
-    to_port = 3389
-    protocol = "tcp"
-    # Allow only the BYUI network to SSH in
-    # cidr_blocks = ["157.201.0.0/16"]
-    cidr_blocks = ["0.0.0.0/0"]
-  }
   egress {
     from_port = 0
     to_port = 0
