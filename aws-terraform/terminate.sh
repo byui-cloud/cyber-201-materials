@@ -9,3 +9,4 @@ rm -R ../byuieast/
 # Run this if you have a leftover file
 # rm ../private_key.pem
 rm ../terminate.sh
+cd ..
