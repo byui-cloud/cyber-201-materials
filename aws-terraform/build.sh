@@ -47,6 +47,8 @@ curl -O $tf_file
 terraform init
 terraform apply -auto-approve
 
+cd ..
+
 # Download the script to connect via ssh and give execute permissions to this file: chmod a+x run.sh
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh && chmod a+x run.sh
 

@@ -2,6 +2,7 @@
 # deletes the resources
 
 rm build.sh
+rm run.sh
 cd byuieast
 terraform destroy --auto-approve
 rm -R ../byuieast/
