@@ -16,22 +16,34 @@ provider "aws" {
 }
 
 # Create a VPC
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-
-  name = "team_vpc"
-  cidr = "10.13.0.0/16"
-
-  azs             = ["us-east-1a"]
-  private_subnets = ["10.13.37.0/24"]
-  public_subnets  = ["10.13.0.0/24"]
-
-  enable_nat_gateway = true
-
+resource "aws_vpc" "team_vpc" {
+  cidr_block = "10.13.0.0/16"
+  instance_tenancy = "default"
+  enable_dns_hostnames = "true"
   tags = {
-    Terraform = "true"
-    Environment = "dev"
+    Name = "team_vpc"
   }
+}
+
+#Create public subnet on VPC
+resource "aws_subnet" "public_subnet" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  cidr_block = "10.13.0.0/24"
+  map_public_ip_on_launch = "true"
+  tags = {
+    Name = "public_subnet"
+  }
+  availability_zone = "us-east-1a"
+}
+
+#Create private subnet on VPC
+resource "aws_subnet" "private_subnet" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  cidr_block = "10.13.37.0/24"
+  tags = {
+    Name = "private_subnet"
+  }
+  availability_zone = "us-east-1a"
 }
 
 #Internet connectivity
@@ -95,14 +107,16 @@ resource "aws_security_group" "bastion" {
     to_port = 22
     protocol = "tcp"
     # Allow only the BYUI network to SSH in
-    cidr_blocks = ["157.201.0.0/16"]
+    # cidr_blocks = ["157.201.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
     description = "RDP"
     from_port = 3389
     to_port = 3389
     protocol = "tcp"
-    cidr_blocks = ["157.201.0.0/16"]
+    # cidr_blocks = ["157.201.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
 
   }
   egress {
