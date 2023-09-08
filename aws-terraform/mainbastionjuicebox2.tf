@@ -16,35 +16,22 @@ provider "aws" {
 }
 
 # Create a VPC
-resource "aws_vpc" "team_vpc" {
-  cidr_block = "10.13.0.0/16"
-  instance_tenancy = "default"
-  enable_dns_hostnames = "true"
-  tags = {
-    Name = "team_vpc"
-  }
-  enable_nat_gateway = "true"
-}
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
 
-#Create public subnet on VPC
-resource "aws_subnet" "public_subnet" {
-  vpc_id = "${aws_vpc.team_vpc.id}"
-  cidr_block = "10.13.0.0/24"
-  map_public_ip_on_launch = "true"
-  tags = {
-    Name = "public_subnet"
-  }
-  availability_zone = "us-east-1a"
-}
+  name = "team_vpc"
+  cidr = "10.13.0.0/16"
 
-#Create private subnet on VPC
-resource "aws_subnet" "private_subnet" {
-  vpc_id = "${aws_vpc.team_vpc.id}"
-  cidr_block = "10.13.37.0/24"
+  azs             = ["us-east-1a"]
+  private_subnets = ["10.13.37.0/24"]
+  public_subnets  = ["10.13.0.0/24"]
+
+  enable_nat_gateway = true
+
   tags = {
-    Name = "private_subnet"
+    Terraform = "true"
+    Environment = "dev"
   }
-  availability_zone = "us-east-1a"
 }
 
 #Internet connectivity
