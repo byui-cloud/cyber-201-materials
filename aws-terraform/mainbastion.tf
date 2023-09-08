@@ -1,5 +1,3 @@
-# Required - 1 student/instructor account per AMI we want to host
-# Make AMI public
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
 
 terraform {

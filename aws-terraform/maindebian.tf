@@ -1,8 +1,5 @@
 # Find the IP using: aws ec2 describe-network-interfaces
 # SSH into the instance after it is ready (replace the IP): ssh -i ../private_key.pem ec2-user@44.202.5.12
-# To RDP, you need to set the password and create a new key on the ec2-user after you ssh in:
-# sudo passwd ec2-user
-# sudo openssl req -x509 -sha384 -newkey rsa:3072 -nodes -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365
 
 # Configure the AWS Provider
 provider "aws" {
