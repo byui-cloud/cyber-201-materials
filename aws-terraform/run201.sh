@@ -56,6 +56,9 @@ echo “sudo passwd ec2-user”
 echo “sudo openssl req -x509 -sha384 -newkey rsa:3072 -nodes -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
 read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run again after a minute." -t 45
 
+# Copy the key
+scp -i private_key.pem private_key.pem "ec2-user@$selected_ip:/home/ec2-user/private_key.pem"
+
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "ec2-user@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
 
