@@ -77,7 +77,7 @@ resource "aws_route_table_association" "a" {
 resource "aws_eip" "ip" {
   vpc      = true
   tags = {
-    Name = "elasticIP"
+    Name = "NATelasticIP"
   }
 }
 
@@ -85,7 +85,7 @@ resource "aws_eip" "ip" {
 resource "aws_eip" "ipbastion" {
 instance = aws_instance.bastion_host.id
   tags = {
-    Name = "bastionIP"
+    Name = "bastionEIP"
   }
 }
 
