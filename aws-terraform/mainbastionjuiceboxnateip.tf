@@ -1,5 +1,6 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
 # Adds a NAT so the internal IP systems have internet
+# Adds a Elastic IP so that the public IP doesn't change for RDP
 terraform {
   required_providers {
     aws = {
@@ -78,6 +79,11 @@ resource "aws_eip" "ip" {
   tags = {
     Name = "elasticIP"
   }
+}
+
+#Create an elastic IP that the bastion host to stay the same
+resource "aws_eip" "ipbastion" {
+instance = aws_instance.bastion_host
 }
 
 #Create the NAT so that private IPs can get updates, access internet, etc.
