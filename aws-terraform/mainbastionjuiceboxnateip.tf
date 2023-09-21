@@ -83,7 +83,7 @@ resource "aws_eip" "ip" {
 
 #Create an elastic IP that the bastion host to stay the same
 resource "aws_eip" "ipbastion" {
-instance = aws_instance.bastion_host
+instance = aws_instance.bastion_host.id
 }
 
 #Create the NAT so that private IPs can get updates, access internet, etc.
