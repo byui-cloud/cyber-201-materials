@@ -199,9 +199,6 @@ resource "aws_security_group" "internal" {
 resource "aws_network_interface" "internalnic" {
   subnet_id = "${aws_subnet.private_subnet.id}"
   private_ips = ["10.13.37.201"]
-  tags {
-    Name = "primary_network_interface"
-  }
 }
 
 # Create an EC2 instance
