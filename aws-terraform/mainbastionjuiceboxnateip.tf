@@ -196,12 +196,7 @@ resource "aws_security_group" "internal" {
   }
 }
 
-resource "aws_network_interface" "internalnic" {
-  subnet_id = "${aws_subnet.private_subnet.id}"
-  private_ips = ["10.13.37.201"]
-}
-
-# Create an EC2 instance sdf
+# Create an EC2 instance
 # Amazon Linux 2 with MATE ami-005b11f8b84489615
 resource "aws_instance" "bastion_host" {
   ami = "ami-005b11f8b84489615"
@@ -222,11 +217,14 @@ resource "aws_instance" "owasp-juice2021" {
      network_interface_id = "${aws_network_interface.internalnic.id}"
      device_index = 0
   }
-  # subnet_id = "${aws_subnet.private_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
-  vpc_security_group_ids = [aws_security_group.internal.id]
   tags = {
     Name = "owasp-juice2021"
   }
   availability_zone = "us-east-1a"
+}
+resource "aws_network_interface" "internalnic" {
+  subnet_id = "${aws_subnet.private_subnet.id}"
+  private_ips = ["10.13.37.201"]
+  security_groups = [aws_security_group.internal.id]
 }
