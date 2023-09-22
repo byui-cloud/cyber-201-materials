@@ -75,8 +75,8 @@ echo "1 - Logout of the VM server: 'logout'"
 echo "2 - Run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve' and delete the folder: 'rm -R byuieast'"
 echo "For the Amazon Linux Mate with RDP, you have to enable RDP by setting the password once connected and rebuild the keys:"
 echo “sudo passwd ec2-user”
-echo “sudo openssl req -x509 -sha384 -newkey rsa:3072 -nodes -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
-read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run again after a minute." -t 45
+echo “openssl req -x509 -sha384 -newkey rsa:4096 -nodes -subj "/C=US/ST=ID/L=Rexburg/O=B/CN=www.example.com" -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
+read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run.sh again after a minute." -t 45
 
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
