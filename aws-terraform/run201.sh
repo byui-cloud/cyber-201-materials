@@ -31,6 +31,8 @@ else
             echo "$i. Instance ID: $instance_id - Public IP address: $ip_address $internal_ip $host_name "
             echo "Take a picture or note of these. "
         fi
+        # start the instance (each one in this loop) and send the output to null
+        aws ec2 start-instances --instance-ids $instance_id 1> /dev/null
         i=$((i+1))
     done <<< "$instances"
     echo "If using a bastion, connect to its public IP and then ssh into the internal IP of the other instance that does not have a public IP"
