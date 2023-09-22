@@ -49,6 +49,9 @@ else
 fi
 
 
+#Download update script
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh && chmod a+x update.sh
+
 echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
 echo "Remember to turn everything off and delete it when you are done:"
 echo "1 - Logout of the VM server: 'logout'"
@@ -58,8 +61,11 @@ echo “sudo passwd ec2-user”
 echo “sudo openssl req -x509 -sha384 -newkey rsa:3072 -nodes -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
 read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run again after a minute." -t 45
 
-# Copy the key
+# Copy the key to the internal IP VM
 scp -i private_key.pem private_key.pem "ec2-user@$selected_ip:/home/ec2-user/private_key.pem"
+scp -i private_key.pem update.sh "ec2-user@$selected_ip:/home/ec2-user/update.sh"
+ssh -i private_key.pem "ec2-user@$selected_ip" chmod a+x "$selected_ip:/home/ec2-user/update.sh"
+
 
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "ec2-user@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
