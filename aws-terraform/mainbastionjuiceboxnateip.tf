@@ -201,7 +201,7 @@ resource "aws_network_interface" "internalnic" {
   private_ips = ["10.13.37.201"]
 }
 
-# Create an EC2 instance
+# Create an EC2 instance sdf
 # Amazon Linux 2 with MATE ami-005b11f8b84489615
 resource "aws_instance" "bastion_host" {
   ami = "ami-005b11f8b84489615"
