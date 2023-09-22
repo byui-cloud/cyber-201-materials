@@ -52,12 +52,10 @@ fi
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh && chmod a+x update.sh
 
 echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
-echo "Remember to turn everything off and delete it when you are done:"
-echo "1 - Logout of the VM server: 'logout'"
-echo "2 - Run: ./terminate.sh or do it manually: 'terraform destroy --auto-approve' and delete the folder: 'rm -R byuieast'"
+echo "Remember to turn everything off when you are done:"
+echo "1 - Logout of the VM server: 'logout' and stop your instances in EC2 to save budget"
 echo "For the Amazon Linux Mate with RDP, you have to enable RDP by setting the password once connected and rebuild the keys:"
-echo “sudo passwd ec2-user”
-echo “openssl req -x509 -sha384 -newkey rsa:4096 -nodes -subj "/C=US/ST=ID/L=Rexburg/O=B/CN=www.example.com" -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
+echo “type ./update.sh once you are connected to do that”
 read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run201.sh again after a minute." -t 45
 
 # Copy the key to the internal IP VM
