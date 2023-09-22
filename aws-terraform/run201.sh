@@ -20,7 +20,7 @@ if [[ $num_instances -eq 1 ]]; then
     internal_ip=$(awk '{print $3}' <<< "$instances")
     host_name=$(awk '{print $4}' <<< "$instances")
 else
-    echo "IP addresses of all EC2 instances in your account (public IP, private IP, hostname):"
+    echo "Starting servers. IP addresses of all EC2 instances in your account (public IP, private IP, hostname):"
 
     # Print a list of instances with their public IP addresses
     i=1
