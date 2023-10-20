@@ -51,6 +51,13 @@ fi
 #Download update script
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh && chmod a+x update.sh
 
+#Download file to connect to juice shop
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/connect.sh && chmod a+x connect.sh
+
+#Download juiceshop install script
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/installjuiceshop.sh && chmod a+x installjuiceshop.sh
+
+
 echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
 echo "Remember to turn everything off when you are done:"
 echo "1 - Logout of the VM server: 'logout' and stop your instances in EC2 to save budget"
@@ -60,7 +67,10 @@ read -p "Pausing for 45 seconds for the server to initialize. If it fails, try .
 
 # Copy the key to the internal IP VM
 scp -i private_key.pem private_key.pem "ec2-user@$selected_ip:/home/ec2-user/private_key.pem"
+# Copy the update script to the Bastion
 scp -i private_key.pem update.sh "ec2-user@$selected_ip:/home/ec2-user/update.sh"
+scp -i private_key.pem installjuiceshop.sh "ec2-user@$selected_ip:/home/ec2-user/installjuiceshop.sh"
+scp -i private_key.pem connect.sh "ec2-user@$selected_ip:/home/ec2-user/connect.sh"
 
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "ec2-user@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
