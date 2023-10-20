@@ -16,7 +16,7 @@ rm build201.sh
 rm run201.sh
 
 # Remove other files
-rm connect.hs
+rm connect.sh
 rm installjuiceshop.sh
 rm removenat.sh
 rm update.sh
