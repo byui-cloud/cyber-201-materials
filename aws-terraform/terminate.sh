@@ -14,3 +14,9 @@ cd ..
 # Remove if the 201 options was run
 rm build201.sh
 rm run201.sh
+
+# Remove other files
+rm connect.hs
+rm installjuiceshop.sh
+rm removenat.sh
+rm update.sh
