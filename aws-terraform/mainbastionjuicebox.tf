@@ -167,14 +167,14 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
-resource "aws_instance" "owasp-juice2021" {
-  ami = "ami-0cea98c1668042d67"
+resource "aws_instance" "owasp-juice" {
+  ami = "ami-005b11f8b84489615"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.private_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.internal.id]
   tags = {
-    Name = "owasp-juice2021"
+    Name = "owasp-juice"
   }
   availability_zone = "us-east-1a"
 }
