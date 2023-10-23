@@ -1,5 +1,6 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
-
+# This script creates three AWS VMs - one a bastion/jumpbox host & 2 OWASP JuiceShop internal VM
+# A pem file is created if ran in cloudshell, which will allow ssh
 terraform {
   required_providers {
     aws = {
@@ -191,5 +192,13 @@ resource "aws_instance" "owasp-juice" {
   tags = {
     Name = "owasp-juice"
   }
+  user_data = <<EOF
+#!/bin/bash
+sudo yum install docker
+sudo docker pull bkimminich/juice-shop
+sudo systemctl enable docker
+sudo service docker start
+sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop
+  EOF
   availability_zone = "us-east-1a"
 }

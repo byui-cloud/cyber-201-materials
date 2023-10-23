@@ -1,6 +1,9 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
+# This script creates two AWS VMs - one a bastion/jumpbox host & OWASP JuiceShop internal VM
+# A pem file is created if ran in cloudshell, which will allow ssh
 # Adds a NAT so the internal IP systems have internet
 # Adds a Elastic IP so that the public IP doesn't change for RDP
+# This one is broken because the AMI is no longer available on AWS marketplace
 terraform {
   required_providers {
     aws = {

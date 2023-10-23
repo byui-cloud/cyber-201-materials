@@ -1,7 +1,7 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
-# This script creates two AWS VMs - one a bastion/jumpbox host & OWASP JuiceShop internal VM
+# This script creates three AWS VMs - one a bastion/jumpbox host & 2 OWASP JuiceShop internal VM
 # A pem file is created if ran in cloudshell, which will allow ssh
-# Adds a NAT so the internal IP systems have internet
+# This one is broken because the two AMIs are no longer available on AWS marketplace
 terraform {
   required_providers {
     aws = {
@@ -74,40 +74,6 @@ resource "aws_route_table_association" "a" {
   route_table_id = "${aws_route_table.r.id}"
 }
 
-#Create an elastic IP that the NAT needs to function
-resource "aws_eip" "ip" {
-  vpc      = true
-  tags = {
-    Name = "elasticIP"
-  }
-}
-
-#Create the NAT so that private IPs can get updates, access internet, etc.
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = "${aws_eip.ip.id}"
-  subnet_id     = "${aws_subnet.public_subnet.id}"
-  tags = {
-    Name = "nat_gateway"
-  }
-}
-
-#Make a route table for the NAT
-resource "aws_route_table" "routeTable_NAT" {
-  vpc_id = "${aws_vpc.team_vpc.id}"
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_nat_gateway.nat_gateway.id}"
-  }
-  tags = {
-    Name = "routeTable_NAT"
-  }
-}
-#Link the route table to the private subnet
- resource "aws_route_table_association" "associateNAT" {
-  subnet_id      = aws_subnet.private_subnet.id
-  route_table_id = aws_route_table.routeTable_NAT.id
-}
-
 # Create a private key, 4096-bit RSA
 resource "tls_private_key" "priv_key" {
   algorithm = "RSA"
@@ -142,16 +108,16 @@ resource "aws_security_group" "bastion" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-
     # Allow only the BYUI network to SSH in
     # cidr_blocks = ["157.201.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
     description = "RDP"
     from_port = 3389
     to_port = 3389
     protocol = "tcp"
+    # cidr_blocks = ["157.201.0.0/16"]
     cidr_blocks = ["0.0.0.0/0"]
 
   }
@@ -189,8 +155,11 @@ resource "aws_security_group" "internal" {
   }
 }
 
-# Create an EC2 instance
+# Create an EC2 instance running Ubuntu 22.04 LTS 
+# Virginia East ami-007855ac798b5175e
+# Oregon West ami-03f65b8614a860c29
 # Amazon Linux 2 with MATE ami-005b11f8b84489615
+# Windows Server 2022 Core Base ami-0fdeb49f47e90dd09
 resource "aws_instance" "bastion_host" {
   ami = "ami-005b11f8b84489615"
   instance_type = "t2.micro"
@@ -201,6 +170,18 @@ resource "aws_instance" "bastion_host" {
   tags = {
     Name = "bastion_host"
   }
+}
+
+resource "aws_instance" "owasp-juice2023" {
+  ami = "ami-0a70c7f569a1a4fd1"
+  instance_type = "t2.micro"
+  subnet_id = "${aws_subnet.private_subnet.id}"
+  key_name = aws_key_pair.server_key.key_name
+  vpc_security_group_ids = [aws_security_group.internal.id]
+  tags = {
+    Name = "owasp-juice2023"
+  }
+  availability_zone = "us-east-1a"
 }
 
 resource "aws_instance" "owasp-juice" {
