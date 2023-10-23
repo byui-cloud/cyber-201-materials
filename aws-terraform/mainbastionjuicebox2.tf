@@ -88,13 +88,6 @@ resource "aws_route_table_association" "private_subnet_association" {
   route_table_id = aws_route_table.private_subnet_route_table.id
 }
 
-# Add a default route to send non-local traffic through the NAT instance
-resource "aws_route" "nat_route" {
-  route_table_id         = aws_route_table.private_subnet_route_table.id
-  destination_cidr_block = "0.0.0.0/0"
-  instance_id            = aws_instance.nat_instance.id
-}
-
 # Create a private key, 4096-bit RSA
 resource "tls_private_key" "priv_key" {
   algorithm = "RSA"
@@ -223,4 +216,11 @@ sudo service docker start
 sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop
   EOF
   availability_zone = "us-east-1a"
+}
+
+# Add a default route to send non-local traffic through the NAT instance
+resource "aws_route" "nat_route" {
+  route_table_id         = aws_route_table.private_subnet_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  instance_id            = aws_instance.owasp-nat.id
 }
