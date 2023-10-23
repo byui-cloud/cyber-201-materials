@@ -67,10 +67,32 @@ resource "aws_route_table" "r" {
   }
 }
 
+# Create a new route table for private subnet
+resource "aws_route_table" "private_subnet_route_table" {
+  vpc_id = aws_vpc.team_vpc.id
+
+  tags = {
+    Name = "private_subnet_route_table"
+  }
+}
+
 #Associate our public subnet with the route table, pushing it to the internet
 resource "aws_route_table_association" "a" {
   subnet_id = "${aws_subnet.public_subnet.id}"
   route_table_id = "${aws_route_table.r.id}"
+}
+
+# Associate the private subnet with the new route table
+resource "aws_route_table_association" "private_subnet_association" {
+  subnet_id      = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.private_subnet_route_table.id
+}
+
+# Add a default route to send non-local traffic through the NAT instance
+resource "aws_route" "nat_route" {
+  route_table_id         = aws_route_table.private_subnet_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  instance_id            = aws_instance.nat_instance.id
 }
 
 # Create a private key, 4096-bit RSA
@@ -171,14 +193,14 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
-resource "aws_instance" "owasp-juice2023" {
-  ami = "ami-0a70c7f569a1a4fd1"
+resource "aws_instance" "owasp-nat" {
+  ami = "ami-005b11f8b84489615"
   instance_type = "t2.micro"
-  subnet_id = "${aws_subnet.private_subnet.id}"
+  subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.internal.id]
   tags = {
-    Name = "owasp-juice2023"
+    Name = "owasp-nat"
   }
   availability_zone = "us-east-1a"
 }
