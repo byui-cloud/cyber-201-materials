@@ -222,5 +222,5 @@ sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bki
 resource "aws_route" "nat_route" {
   route_table_id         = aws_route_table.private_subnet_route_table.id
   destination_cidr_block = "0.0.0.0/0"
-  instance_id            = aws_instance.owasp-nat.id
+  network_interface_id = aws_instance.owasp-nat.network_interface_ids[0]
 }
