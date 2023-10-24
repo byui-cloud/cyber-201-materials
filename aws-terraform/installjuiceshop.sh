@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Installs OWASP Juice Shop in a docker on port 80 and makes it auto start on reboot
 sudo yum install -y docker
 sudo docker pull bkimminich/juice-shop
 sudo systemctl enable docker

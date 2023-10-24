@@ -69,7 +69,8 @@ read -p "Pausing for 45 seconds for the server to initialize. If it fails, try .
 scp -i private_key.pem private_key.pem "ec2-user@$selected_ip:/home/ec2-user/private_key.pem"
 # Copy the update script to the Bastion
 scp -i private_key.pem update.sh "ec2-user@$selected_ip:/home/ec2-user/update.sh"
-scp -i private_key.pem installjuiceshop.sh "ec2-user@$selected_ip:/home/ec2-user/installjuiceshop.sh"
+# userdata file does this now in the terraform file:
+# scp -i private_key.pem installjuiceshop.sh "ec2-user@$selected_ip:/home/ec2-user/installjuiceshop.sh"
 scp -i private_key.pem connect.sh "ec2-user@$selected_ip:/home/ec2-user/connect.sh"
 
 # Initiate SSH session to the selected instance
