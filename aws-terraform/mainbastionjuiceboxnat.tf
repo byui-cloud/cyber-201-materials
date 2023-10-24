@@ -76,7 +76,6 @@ resource "aws_route_table_association" "a" {
 
 #Create an elastic IP that the NAT needs to function
 resource "aws_eip" "ip" {
-  vpc      = true
   tags = {
     Name = "elasticIP"
   }
