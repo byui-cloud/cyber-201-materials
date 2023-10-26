@@ -76,7 +76,6 @@ resource "aws_route_table_association" "a" {
 
 #Create an elastic IP that the NAT needs to function
 resource "aws_eip" "ip" {
-  vpc      = true
   tags = {
     Name = "elasticIP"
   }
@@ -212,5 +211,13 @@ resource "aws_instance" "owasp-juice" {
   tags = {
     Name = "owasp-juice"
   }
+      user_data = <<EOF
+#!/bin/bash
+sudo yum install -y docker
+sudo docker pull bkimminich/juice-shop:v12.8.1
+sudo systemctl enable docker
+sudo service docker start
+sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop:v12.8.1
+  EOF
   availability_zone = "us-east-1a"
 }
