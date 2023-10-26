@@ -2,7 +2,7 @@
 # This script creates two AWS VMs - one a bastion/jumpbox host & OWASP JuiceShop internal VM
 # A pem file is created if ran in cloudshell, which will allow ssh
 # Adds a NAT so the internal IP systems have internet
-# Adds a Elastic IP so that the public IP doesn't change for RDP
+# Adds a Elastic IP so that the public IP doesn't change for RDP on bastion
 terraform {
   required_providers {
     aws = {
@@ -232,6 +232,7 @@ sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bki
   EOF
   availability_zone = "us-east-1a"
 }
+# Set the IP for the internal OWASP VM to be 10.13.37.201
 resource "aws_network_interface" "internalnic" {
   subnet_id = "${aws_subnet.private_subnet.id}"
   private_ips = ["10.13.37.201"]

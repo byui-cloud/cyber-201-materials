@@ -30,7 +30,7 @@ case $tf_option in
         tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainubuntu.tf"
         ;;
     3)
-        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox.tf"
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox2.tf"
         ;;
     4)
         echo "Look at some .tf files listed here: https://github.com/byui-cloud/cyber-201-materials/tree/main/aws-terraform"
@@ -56,7 +56,7 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh &&
 # The NAT allows you to download items from the internet on the internal juice shop
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/removenat.sh && chmod a+x removenat.sh
 
-echo "Run ./terminate.sh when you are done to save your budget." 
+echo "Run ./terminate.sh when you are done to delete everything and save your budget." 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
 read -n 1 -s -r -p $'\nPress any key to connect to the instance/VM (./run.sh) or CTRL + C to stop...'
 

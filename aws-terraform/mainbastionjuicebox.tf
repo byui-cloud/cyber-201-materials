@@ -1,5 +1,6 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
-
+# This script creates two AWS VMs - one a bastion/jumpbox host & OWASP JuiceShop internal VM
+# A pem file is created if ran in cloudshell, which will allow ssh
 terraform {
   required_providers {
     aws = {
@@ -167,14 +168,32 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
+# Create an AWS Linux VM with OWASP Juiceshop app in a docker 
+# Available on http://10.13.37.201 from the bastion host
 resource "aws_instance" "owasp-juice" {
   ami = "ami-005b11f8b84489615"
   instance_type = "t2.micro"
-  subnet_id = "${aws_subnet.private_subnet.id}"
+  network_interface {
+     network_interface_id = "${aws_network_interface.internalnic.id}"
+     device_index = 0
+  }
   key_name = aws_key_pair.server_key.key_name
-  vpc_security_group_ids = [aws_security_group.internal.id]
   tags = {
     Name = "owasp-juice"
   }
+    user_data = <<EOF
+#!/bin/bash
+sudo yum install -y docker
+sudo docker pull bkimminich/juice-shop:v12.8.1
+sudo systemctl enable docker
+sudo service docker start
+sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop:v12.8.1
+  EOF
   availability_zone = "us-east-1a"
+}
+# Set the IP for the internal OWASP VM to be 10.13.37.201
+resource "aws_network_interface" "internalnic" {
+  subnet_id = "${aws_subnet.private_subnet.id}"
+  private_ips = ["10.13.37.201"]
+  security_groups = [aws_security_group.internal.id]
 }

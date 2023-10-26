@@ -54,9 +54,8 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh
 #Download file to connect to juice shop
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/connect.sh && chmod a+x connect.sh
 
-#Download juiceshop install script
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/installjuiceshop.sh && chmod a+x installjuiceshop.sh
-
+#Download juiceshop install script - the terraform user data now installs this
+# curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/installjuiceshop.sh && chmod a+x installjuiceshop.sh
 
 echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
 echo "Remember to turn everything off when you are done:"

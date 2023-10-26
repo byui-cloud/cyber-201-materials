@@ -78,6 +78,20 @@ echo “sudo passwd ec2-user”
 echo “openssl req -x509 -sha384 -newkey rsa:4096 -nodes -subj "/C=US/ST=ID/L=Rexburg/O=B/CN=www.example.com" -keyout /etc/xrdp/key.pem -out /etc/xrdp/cert.pem -days 365”
 read -p "Pausing for 45 seconds for the server to initialize. If it fails, try ./run.sh again after a minute." -t 45
 
+#Download update script
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh && chmod a+x update.sh
+
+#Download file to connect to juice shop
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/connect.sh && chmod a+x connect.sh
+
+# Copy the key to the internal IP VM
+scp -i private_key.pem private_key.pem "ec2-user@$selected_ip:/home/ec2-user/private_key.pem"
+# Copy the update script to the Bastion
+scp -i private_key.pem update.sh "ec2-user@$selected_ip:/home/ec2-user/update.sh"
+# userdata file does this now in the terraform file:
+# scp -i private_key.pem installjuiceshop.sh "ec2-user@$selected_ip:/home/ec2-user/installjuiceshop.sh"
+scp -i private_key.pem connect.sh "ec2-user@$selected_ip:/home/ec2-user/connect.sh"
+
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "$ssh_username@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
 
