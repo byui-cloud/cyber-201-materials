@@ -208,8 +208,7 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
-# Create an AWS Linux VM with OWASP Juiceshop app in a docker 
-# Available on http://10.13.37.201 from the bastion host
+# Create an AWS Linux nat instance
 resource "aws_instance" "owasp-nat" {
   ami = "ami-005b11f8b84489615"
   instance_type = "t2.micro"
@@ -256,5 +255,5 @@ resource "aws_network_interface" "internalnic" {
 resource "aws_route" "nat_route" {
   route_table_id         = aws_route_table.private_subnet_route_table.id
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id = aws_instance.owasp-nat.primary_network_interface_id
+  instance_id            = aws_instance.owasp-nat.id
 }
