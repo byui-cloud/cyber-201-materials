@@ -218,6 +218,8 @@ resource "aws_instance" "owasp-nat" {
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.internal.id]
+  # Disable source/destination checks for the NAT instance
+  source_dest_check = false
   tags = {
     Name = "owasp-nat"
   }
