@@ -54,7 +54,7 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh &&
 
 # Download the file to remove the nat (It costs a lot per day for a NAT)
 # The NAT allows you to download items from the internet on the internal juice shop
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/removenat.sh && chmod a+x removenat.sh
+# curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/removenat.sh && chmod a+x removenat.sh
 
 echo "Run ./terminate.sh when you are done to delete everything and save your budget." 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
