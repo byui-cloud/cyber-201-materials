@@ -224,7 +224,9 @@ resource "aws_instance" "owasp-nat" {
   user_data = <<EOF
 #!/bin/bash
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
+sudo sysctl -p /etc/sysctl.conf
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/custom-ip-forwarding.conf
+sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
 EOF
   availability_zone = "us-east-1a"
 }
