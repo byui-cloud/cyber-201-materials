@@ -173,7 +173,7 @@ resource "aws_security_group" "internal" {
 resource "aws_security_group" "nat_security_group" {
   name        = "nat_security_group"
   description = "Security group for the NAT instance"
-
+  vpc_id = "${aws_vpc.team_vpc.id}"
   # Allow inbound traffic from the private subnets
   ingress {
     from_port   = 0
@@ -187,6 +187,9 @@ resource "aws_security_group" "nat_security_group" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+    tags = {
+    Name = "nat_security"
   }
 }
 
@@ -218,6 +221,11 @@ resource "aws_instance" "owasp-nat" {
   tags = {
     Name = "owasp-nat"
   }
+  user_data = <<EOF
+#!/bin/bash
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+EOF
   availability_zone = "us-east-1a"
 }
 
