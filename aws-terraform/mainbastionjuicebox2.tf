@@ -55,6 +55,13 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+#Create an elastic IP that the bastion host to stay the same
+resource "aws_eip" "ipbastion" {
+instance = aws_instance.bastion_host.id
+  tags = {
+    Name = "bastionEIP"
+  }
+}
 #Create route table to push through internet gateway
 resource "aws_route_table" "r" {
   vpc_id = "${aws_vpc.team_vpc.id}"
