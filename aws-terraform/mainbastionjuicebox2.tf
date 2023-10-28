@@ -262,10 +262,12 @@ sudo yum install -y docker
 sudo docker pull bkimminich/juice-shop:v12.8.1
 sudo systemctl enable docker
 sudo service docker start
-sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop:v7.0.2
+sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop:v12.8.1
   EOF
   availability_zone = "us-east-1a"
 }
+# This line below is the oldest docker version of juice shop
+# sudo docker run --name naughty_keller -d --restart unless-stopped -p 80:3000 bkimminich/juice-shop:v7.0.2
 # Set the IP for the internal OWASP VM to be 10.13.37.201
 resource "aws_network_interface" "internalnic" {
   subnet_id = "${aws_subnet.private_subnet.id}"
