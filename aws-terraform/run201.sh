@@ -54,6 +54,9 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh
 #Download file to connect to juice shop
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/connect.sh && chmod a+x connect.sh
 
+#Download the deleteeverything script if needed
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/deleteeverything.sh && chmod a+x deleteeverything.sh
+
 #Download juiceshop install script - the terraform user data now installs this
 # curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/installjuiceshop.sh && chmod a+x installjuiceshop.sh
 
