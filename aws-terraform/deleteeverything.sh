@@ -41,4 +41,7 @@ aws ec2 describe-network-interfaces --query 'NetworkInterfaces[*].[NetworkInterf
 # Release all static IPs
 aws ec2 describe-addresses --query 'Addresses[*].[AllocationId]' --output text | xargs -I {} aws ec2 release-address --allocation-id {}
 
+# Delete all key pairs
+aws ec2 delete-key-pair --key-name $(aws ec2 describe-key-pairs --query 'KeyPairs[*].[KeyName]' --output text)
+
 
