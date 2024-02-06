@@ -92,3 +92,4 @@ aws ec2 describe-addresses --query 'Addresses[*].[AllocationId]' --output text |
 # Delete all key pairs
 aws ec2 delete-key-pair --key-name "server"
 
+rm -f terraform.tfstate
