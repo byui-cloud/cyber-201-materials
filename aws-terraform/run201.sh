@@ -48,16 +48,16 @@ else
     selected_ip=$(awk -v num="$selected_num" 'NR == num {print $2}' <<< "$instances")
 fi
 
-#Download update script
+# Download update script
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/update.sh && chmod a+x update.sh
 
-#Download file to connect to juice shop
+# Download file to connect to juice shop file
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/connect.sh && chmod a+x connect.sh
 
-#Download the deleteeverything script if needed
+# Download the deleteeverything script if needed
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/deleteeverything.sh && chmod a+x deleteeverything.sh
 
-#Download juiceshop install script - the terraform user data now installs this
+# Download juiceshop install script - the terraform user data now installs this
 # curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/installjuiceshop.sh && chmod a+x installjuiceshop.sh
 
 echo "Connecting to the instance with IP (take note for RDP): $selected_ip..."
@@ -77,6 +77,3 @@ scp -i private_key.pem connect.sh "ec2-user@$selected_ip:/home/ec2-user/connect.
 
 # Initiate SSH session to the selected instance
 ssh -i private_key.pem "ec2-user@$selected_ip"  # Replace 'ec2-user' with the appropriate SSH username for your EC2 instance
-
-
-
