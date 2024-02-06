@@ -8,11 +8,13 @@ cd byuieast
 terraform destroy --auto-approve
 rm -R ../byuieast/
 # Run this if you have a leftover file
-rm ../private_key.pem
-rm ../private_key.key
+
 rm ../terminate.sh
 cd ..
 # Remove if the 201 options was run
+rm -fR byuieast/
+rm private_key.pem
+rm private_key.key
 rm build201.sh
 rm run201.sh
 
@@ -24,19 +26,54 @@ rm update.sh
 rm -fR bin/ 
 rm deleteeverything.sh
 
-# Terminate all instances
-aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --output text | \
-while read -r instance_id; do
-    aws ec2 terminate-instances --instance-ids "$instance_id"
+# Replace the instance names in the array with the actual names of your instances
+instance_names=("bastion_host" "owasp-nat" "owasp-juice")
+
+for instance_name in "${instance_names[@]}"; do
+    # Terminate instances with the specified name directly
+    aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance_name" --query 'Reservations[].Instances[].InstanceId' --output text)
+
+    echo "Termination request sent for instances with Name '$instance_name'."
 done
 
-# Remove all security groups except the default
-default_group_id=$(aws ec2 describe-security-groups --filters Name=group-name,Values=default --query 'SecurityGroups[*].GroupId' --output text)
-all_group_ids=$(aws ec2 describe-security-groups --query 'SecurityGroups[?GroupId!=`'$default_group_id'`].GroupId' --output text)
 
-for group_id in $all_group_ids; do
-    aws ec2 delete-security-group --group-id "$group_id"
+# Remove 'Bastion' and 'Internal' security groups except the default
+
+# Get the list of VPC IDs
+vpc_ids=$(aws ec2 describe-vpcs --query 'Vpcs[*].VpcId' --output text)
+
+# Check if VPC IDs are found
+if [ -z "$vpc_ids" ]; then
+  echo "Error: No VPCs found or unable to retrieve VPC IDs."
+  exit 1
+fi
+
+# Loop through each VPC ID
+for vpc_id in $vpc_ids; do
+  echo "Processing VPC ID: $vpc_id"
+
+  # Delete Security Group 'Bastion' if it exists
+  bastion_group_id=$(aws ec2 describe-security-groups --filters "Name=vpc-id,Values=$vpc_id" "Name=group-name,Values=Bastion" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null)
+  if [ -n "$bastion_group_id" ]; then
+    echo "Deleting Security Group 'Bastion' in VPC $vpc_id"
+    aws ec2 delete-security-group --group-id "$bastion_group_id"
+    echo "Security Group 'Bastion' deleted successfully."
+  else
+    echo "Security Group 'Bastion' not found in VPC $vpc_id"
+  fi
+
+  # Delete Security Group 'Internal' if it exists
+  internal_group_id=$(aws ec2 describe-security-groups --filters "Name=vpc-id,Values=$vpc_id" "Name=group-name,Values=Internal" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null)
+  if [ -n "$internal_group_id" ]; then
+    echo "Deleting Security Group 'Internal' in VPC $vpc_id"
+    aws ec2 delete-security-group --group-id "$internal_group_id"
+    echo "Security Group 'Internal' deleted successfully."
+  else
+    echo "Security Group 'Internal' not found in VPC $vpc_id"
+  fi
+
 done
+
 
 
 # Remove all network interfaces
@@ -46,6 +83,5 @@ aws ec2 describe-network-interfaces --query 'NetworkInterfaces[*].[NetworkInterf
 aws ec2 describe-addresses --query 'Addresses[*].[AllocationId]' --output text | xargs -I {} aws ec2 release-address --allocation-id {}
 
 # Delete all key pairs
-aws ec2 delete-key-pair --key-name $(aws ec2 describe-key-pairs --query 'KeyPairs[*].[KeyName]' --output text)
-
+aws ec2 delete-key-pair --key-name "server"
 
