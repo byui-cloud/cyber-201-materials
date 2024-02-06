@@ -1,22 +1,29 @@
 #!/bin/bash
 # deletes the resources
+# Specify the directory path
+directory_path="byuieast"
 
 rm build.sh
 rm run.sh
 
-cd byuieast
-terraform destroy --auto-approve
-rm -R ../byuieast/
-# Run this if you have a leftover file
+# Check if the directory exists
+if [ -d "$directory" ]; then
+    cd byuieast
+    terraform destroy --auto-approve
+    rm -R ../byuieast/
+    # Run this if you have a leftover file
+    rm ../terminate.sh
+    cd ..
+else
+  echo "Directory does not exist."
+fi
 
-rm ../terminate.sh
-cd ..
 # Remove if the 201 options was run
 rm -fR byuieast/
-rm private_key.pem
-rm private_key.key
-rm build201.sh
-rm run201.sh
+rm -f private_key.pem
+rm -f private_key.key
+rm -f build201.sh
+rm -f run201.sh
 
 # Remove other files
 rm connect.sh
