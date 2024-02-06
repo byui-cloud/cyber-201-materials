@@ -25,15 +25,19 @@ rm -fR bin/
 rm deleteeverything.sh
 
 # Terminate all instances
-aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --output text)
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId]' --output text | \
+while read -r instance_id; do
+    aws ec2 terminate-instances --instance-ids "$instance_id"
+done
 
 # Remove all security groups except the default
 default_group_id=$(aws ec2 describe-security-groups --filters Name=group-name,Values=default --query 'SecurityGroups[*].GroupId' --output text)
-all_group_ids=$(aws ec2 describe-security-groups --query 'SecurityGroups[?GroupId!=`'$default_group_id'`].[GroupId]' --output text)
+all_group_ids=$(aws ec2 describe-security-groups --query 'SecurityGroups[?GroupId!=`'$default_group_id'`].GroupId' --output text)
 
 for group_id in $all_group_ids; do
-    aws ec2 delete-security-group --group-id $group_id
+    aws ec2 delete-security-group --group-id "$group_id"
 done
+
 
 # Remove all network interfaces
 aws ec2 describe-network-interfaces --query 'NetworkInterfaces[*].[NetworkInterfaceId]' --output text | xargs -I {} aws ec2 delete-network-interface --network-interface-id {}
