@@ -32,6 +32,7 @@ rm removenat.sh
 rm update.sh
 rm -fR bin/ 
 rm deleteeverything.sh
+rm terminate.sh
 
 # Replace the instance names in the array with the actual names of your instances
 instance_names=("bastion_host" "owasp-nat" "owasp-juice")
