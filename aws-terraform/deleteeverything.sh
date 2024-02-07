@@ -41,7 +41,7 @@ for instance_name in "${instance_names[@]}"; do
     aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance_name" --query 'Reservations[].Instances[].InstanceId' --output text)
 
     echo "Termination request sent for instances with Name '$instance_name'."
-done
+done >/dev/null
 
 
 # Remove 'Bastion' and 'Internal' security groups except the default
@@ -79,7 +79,7 @@ for vpc_id in $vpc_ids; do
     echo "Security Group 'Internal' not found in VPC $vpc_id"
   fi
 
-done
+done >/dev/null
 
 
 
