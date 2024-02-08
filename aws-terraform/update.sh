@@ -2,6 +2,7 @@
 
 #Copy Juiceshop docker install script to internal VM
 scp -i private_key.pem installjuiceshop.sh "ec2-user@10.13.37.201:/home/ec2-user/installjuiceshop.sh"
+rm installjuiceshop.sh
 
 #sets the RDP cert for remote desktop login
 sudo passwd ec2-user
