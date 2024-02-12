@@ -81,7 +81,7 @@ for vpc_id in $vpc_ids; do
   fi
 
   # Delete Security Group 'nat_security' if it exists
-  nat_security_group_id=$(aws ec2 describe-security-groups --filters "Name=vpc-id,Values=$vpc_id" "Name=group-name,Values=nat_security" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null)
+  nat_security_group_id=$(aws ec2 describe-security-groups --filters "Name=vpc-id,Values=$vpc_id" "Name=group-name,Values=nat_security_group" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null)
   if [ -n "$nat_security_group_id" ]; then
     echo "Deleting Security Group 'nat_security' in VPC $vpc_id"
     aws ec2 delete-security-group --group-id "$nat_security_group_id"
