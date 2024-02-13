@@ -1,3 +1,4 @@
+# curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/buildwest.sh && chmod a+x buildwest.sh && ./buildwest.sh
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 # Install terraform
 sudo yum install -y yum-utils
