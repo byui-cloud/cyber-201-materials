@@ -11,7 +11,7 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/terminate
 mkdir byuieast
 cd byuieast
 
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox2.tf
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuiceboxwest.tf
 terraform init
 terraform apply -auto-approve
 
