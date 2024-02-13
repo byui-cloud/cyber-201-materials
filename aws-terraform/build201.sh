@@ -24,6 +24,9 @@ cd ..
 # Download the script to connect via ssh and give execute permissions to this file: chmod a+x run.sh
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run201.sh && chmod a+x run201.sh
 
+# Download the deleteeverything script if needed
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/deleteeverything.sh && chmod a+x deleteeverything.sh
+
 # Download the file to remove the nat (It costs a lot per day for a NAT)
 # The NAT allows you to download items from the internet on the internal juice shop
 # curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/removenat.sh && chmod a+x removenat.sh
