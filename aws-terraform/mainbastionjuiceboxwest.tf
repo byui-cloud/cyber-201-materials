@@ -233,13 +233,12 @@ resource "aws_instance" "owasp-nat" {
   }
   user_data = <<EOF
 #!/bin/bash
-echo "sudo net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
-sudo sysctl -p /etc/sysctl.conf
-echo "sudo net.ipv4.ip_forward = 1" >> /etc/sysctl.d/custom-ip-forwarding.conf
-sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
-sudo /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-sudo /sbin/iptables -F FORWARD
-sudo service iptables save
+sudo yum install -y iptables-services
+sudo systemctl enable iptables.service
+sudo systemctl start iptables.service
+echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+sudo iptables -t nat -A POSTROUTING -o enX0 -s 0.0.0.0/0 -j MASQUERADE
 EOF
   availability_zone = "us-west-2a"
 }
