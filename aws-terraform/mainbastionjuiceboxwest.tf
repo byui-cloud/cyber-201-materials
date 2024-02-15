@@ -1,4 +1,6 @@
 # https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
+# Fix the nat: https://medium.com/nerd-for-tech/how-to-turn-an-amazon-linux-2023-ec2-into-a-nat-instance-4568dad1778f
+# You may need to change enX0 on the instance to another NIC name
 # This script creates three AWS VMs - one a bastion/jumpbox host, an OWASP JuiceShop internal VM, and a NAT instance 
 # A pem file is created if ran in cloudshell, which will allow ssh
 terraform {
@@ -239,6 +241,8 @@ sudo systemctl start iptables.service
 echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 sudo iptables -t nat -A POSTROUTING -o enX0 -s 0.0.0.0/0 -j MASQUERADE
+sudo /sbin/iptables -F FORWARD
+sudo service iptables save
 EOF
   availability_zone = "us-west-2a"
 }
