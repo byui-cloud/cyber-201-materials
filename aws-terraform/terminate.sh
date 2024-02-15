@@ -1,7 +1,7 @@
 #!/bin/bash
 # deletes the resources
 
-directory_path="byuieast"
+directory="byuieast"
 
 rm build.sh
 rm run.sh
