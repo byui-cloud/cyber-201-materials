@@ -2,7 +2,7 @@
 # Fix the nat: https://medium.com/nerd-for-tech/how-to-turn-an-amazon-linux-2023-ec2-into-a-nat-instance-4568dad1778f
 # You may need to change enX0 on the instance to another NIC name
 # This script creates three AWS VMs - one a bastion/jumpbox host, an OWASP JuiceShop internal VM, and a NAT instance 
-# A pem file is created if ran in cloudshell, which will allow ssh
+# A pem file is created if run in cloudshell, which will allow ssh
 terraform {
   required_providers {
     aws = {
