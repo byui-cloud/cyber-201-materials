@@ -31,7 +31,7 @@ curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/deleteeve
 # The NAT allows you to download items from the internet on the internal juice shop
 # curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/removenat.sh && chmod a+x removenat.sh
 
-echo "Run ./terminate.sh when you are done to delete everything and save your budget." 
+echo "Run ./terminate.sh to delete everything." 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
 read -n 1 -s -r -p $'\nPress any key to connect to the instance/VM (./run201.sh) or CTRL + C to stop...'
 
