@@ -2,6 +2,7 @@
 resource "aws_instance" "winserver_host" {
   ami = "ami-0fc682b2a42e57ca2"
   instance_type = "t2.micro"
+  key_name = aws_key_pair.server_key.key_name
   network_interface {
      network_interface_id = "${aws_network_interface.internalnicfour.id}"
      device_index = 0
