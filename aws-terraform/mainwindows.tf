@@ -59,7 +59,7 @@ resource "aws_security_group" "byuisg" {
 
 # Create an EC2 instance Microsoft Windows Server 2022 Base
 resource "aws_instance" "winserver_host" {
-  ami = "ami-0fc682b2a42e57ca2"
+  ami = "ami-02dca614f074272a6"
   instance_type = "t2.micro"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.byuisg.id]
