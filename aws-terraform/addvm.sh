@@ -11,13 +11,13 @@ Enter the number of your choice: " tf_option
 
 case $tf_option in
     1)
-        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainaddondc6.tf"
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/dc6.tf"
         ;;
     2)
-        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainubuntu.tf"
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/ubuntu.tf"
         ;;
     3)
-        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainwindows.tf"
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/windows.tf"
         ;;
     4)
         echo "Look at some .tf files listed here: https://github.com/byui-cloud/cyber-201-materials/tree/main/aws-terraform"

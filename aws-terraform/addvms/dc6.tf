@@ -1,4 +1,4 @@
-# Adds a Dc6 VM
+# Adds a Dc6 VM to the Bastion and Juice shop setup
 
 # Create an DC-6 image 
 # Available on http://10.13.37.202 from the bastion host
@@ -15,7 +15,7 @@ resource "aws_instance" "dc-six" {
   availability_zone = "us-east-1a"
 }
 
-# Set the IP for the internal OWASP VM to be 10.13.37.202
+# Set the IP for the internal VM to be 10.13.37.202
 resource "aws_network_interface" "internalnictwo" {
   subnet_id = "${aws_subnet.private_subnet.id}"
   private_ips = ["10.13.37.202"]
