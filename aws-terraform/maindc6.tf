@@ -1,6 +1,4 @@
-# https://developer-shubham-rasal.medium.com/aws-networking-using-terraform-cbbf28dcb124
-# This script creates three AWS VMs - one a bastion/jumpbox host, an OWASP JuiceShop internal VM, and a NAT instance 
-# A pem file is created if ran in cloudshell, which will allow ssh
+# Adds a Dc6 VM
 terraform {
   required_providers {
     aws = {
