@@ -15,6 +15,9 @@ sudo yum -y install terraform
 # Give execute permissions to this file: chmod a+x terminate.sh
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/terminate.sh && chmod a+x terminate.sh
 
+#Script to add more vms later
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvm.sh && chmod a+x addvm.sh && ./addvm.sh
+
 mkdir byuieast
 cd byuieast
 
