@@ -36,7 +36,7 @@ terraform apply -auto-approve
 cd ..
 
 # Download the script to connect via ssh and give execute permissions to this file: chmod a+x run.sh
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run.sh && chmod a+x run.sh
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/run201.sh && chmod a+x run201.sh
 
 echo "If you have trouble connecting, wait a minute and try ./run.sh again."
 echo "To get the password for windows, run this below but replace the instance id with your instance id."
@@ -44,4 +44,4 @@ echo "aws ec2 get-password-data --instance-id  i-03d7c90aad1ebf7fd --priv-launch
 read -n 1 -s -r -p $'\nPress any key to connect to the instance/VM (./run.sh) or CTRL + C to stop...'
 
 # Next run the run.sh file to connect to the servers
-./run.sh
+./run201.sh
