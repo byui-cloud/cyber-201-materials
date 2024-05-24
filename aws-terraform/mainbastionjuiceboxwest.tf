@@ -291,7 +291,7 @@ resource "aws_instance" "dc-six" {
   tags = {
     Name = "dc-six"
   }
-  availability_zone = "us-east-1a"
+  availability_zone = "us-west-2a"
 }
 
 # Set the IP for the internal Dc6 VM to be 10.13.37.202
