@@ -291,7 +291,7 @@ resource "aws_instance" "dc-six" {
   availability_zone = "us-east-1a"
 }
 
-# Set the IP for the internal OWASP VM to be 10.13.37.202
+# Set the IP for the internal Dc6 VM to be 10.13.37.202
 resource "aws_network_interface" "internalnictwo" {
   subnet_id = "${aws_subnet.private_subnet.id}"
   private_ips = ["10.13.37.202"]
