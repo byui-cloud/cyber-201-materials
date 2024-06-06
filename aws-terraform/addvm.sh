@@ -1,4 +1,5 @@
 #!/bin/bash
+#  curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvm.sh && chmod a+x addvm.sh && ./addvm.sh
 
 cd byuieast
 
