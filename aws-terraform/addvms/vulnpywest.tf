@@ -1,0 +1,25 @@
+# OWASP Top 10 VulnPy
+
+# Create an EC2 instance running VulnPy
+resource "aws_instance" "vulnpy_host" {
+  ami = "ami-07bc7f52326cb77dd"
+  instance_type = "t2.micro"
+  key_name = aws_key_pair.server_key.key_name
+  network_interface {
+     network_interface_id = "${aws_network_interface.internalnicfour.id}"
+     device_index = 0
+  }
+  tags = {
+    Name = "vulnpy_host"
+  }
+  availability_zone = "us-west-2a"
+}
+
+
+
+# Set the IP for the internal OWASP VM to be 10.13.37.203
+resource "aws_network_interface" "internalnicfour" {
+  subnet_id = "${aws_subnet.private_subnet.id}"
+  private_ips = ["10.13.37.203"]
+  security_groups = [aws_security_group.internal.id]
+}
