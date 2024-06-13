@@ -12,7 +12,7 @@ Enter the number of your choice: " tf_option
 
 case $tf_option in
     1)
-        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/vulnpy.tf"
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/vulnpywest.tf"
         ;;
     2)
         tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvms/ubuntuwest.tf"
