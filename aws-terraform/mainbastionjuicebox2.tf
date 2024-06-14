@@ -240,9 +240,13 @@ echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/custom-ip-forwarding.conf
 sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
+sudo yum install iptables-services -y
+sudo systemctl enable iptables
+sudo systemctl start iptables
 sudo /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo /sbin/iptables -F FORWARD
 sudo service iptables save
+sudo amazon-linux-extras install firefox
 EOF
   availability_zone = "us-east-1a"
 }
