@@ -17,9 +17,9 @@ resource "aws_instance" "vulnpy_host" {
 
 
 
-# Set the IP for the internal OWASP VM to be 10.13.37.203
+# Set the IP for the internal OWASP VM to be 10.13.37.204
 resource "aws_network_interface" "internalnicfour" {
   subnet_id = "${aws_subnet.private_subnet.id}"
-  private_ips = ["10.13.37.203"]
+  private_ips = ["10.13.37.204"]
   security_groups = [aws_security_group.internal.id]
 }

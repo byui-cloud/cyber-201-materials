@@ -208,7 +208,7 @@ resource "aws_security_group" "nat_security_group" {
 # Windows Server 2022 Core Base ami-0fdeb49f47e90dd09
 resource "aws_instance" "bastion_host" {
   ami = "ami-005b11f8b84489615"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.bastion.id]
@@ -216,6 +216,10 @@ resource "aws_instance" "bastion_host" {
   tags = {
     Name = "bastion_host"
   }
+  user_data = <<EOF
+#!/bin/bash 
+sudo amazon-linux-extras install firefox
+EOF
 }
 
 # Create an AWS Linux nat instance
