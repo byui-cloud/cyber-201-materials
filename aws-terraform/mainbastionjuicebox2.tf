@@ -237,6 +237,8 @@ resource "aws_instance" "bastion_host" {
   user_data = <<EOF
 #!/bin/bash 
 sudo amazon-linux-extras install firefox
+sudo /bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
+sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
 EOF
 }
 
