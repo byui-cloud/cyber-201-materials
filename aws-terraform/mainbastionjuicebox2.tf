@@ -218,7 +218,6 @@ resource "aws_security_group" "nat_security_group" {
   }
 }
 
-
 # Create an EC2 instance running Ubuntu 22.04 LTS 
 # Virginia East ami-007855ac798b5175e
 # Oregon West ami-03f65b8614a860c29
@@ -239,6 +238,7 @@ resource "aws_instance" "bastion_host" {
 sudo amazon-linux-extras install firefox
 sudo /bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
 sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
+sudo yum update -y
 EOF
 }
 
@@ -267,6 +267,7 @@ sudo /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo /sbin/iptables -F FORWARD
 sudo service iptables save
 sudo amazon-linux-extras install firefox
+sudo yum update -y
 EOF
   availability_zone = "us-east-1a"
 }
