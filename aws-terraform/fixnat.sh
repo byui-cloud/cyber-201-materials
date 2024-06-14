@@ -1,9 +1,9 @@
 #!/bin/bash
 # Adds IPtables rules needed for a NAT to have internet
 # curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/fixnat.sh && chmod a+x fixnat.sh && ./fixnat.sh
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
 sudo sysctl -p /etc/sysctl.conf
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/custom-ip-forwarding.conf
+sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/custom-ip-forwarding.conf"
 sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
 sudo yum install iptables-services -y
 sudo systemctl enable iptables
