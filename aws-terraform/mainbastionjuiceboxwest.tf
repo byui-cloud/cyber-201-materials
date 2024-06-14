@@ -142,7 +142,6 @@ resource "aws_security_group" "bastion" {
     protocol = "tcp"
     # cidr_blocks = ["157.201.0.0/16"]
     cidr_blocks = ["0.0.0.0/0"]
-
   }
   egress {
     from_port = 0
@@ -161,11 +160,28 @@ resource "aws_security_group" "internal" {
   vpc_id = "${aws_vpc.team_vpc.id}"
 # Ingress rule to allow All
   ingress {
+    description = "SSH"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    # Allow only the BYUI network to SSH in
+    # cidr_blocks = ["157.201.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "RDP"
+    from_port = 3389
+    to_port = 3389
+    protocol = "tcp"
+    # cidr_blocks = ["157.201.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
+  }  
+  ingress {
     description = "All allowed"
     from_port = 0
     to_port = 0
     protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.13.0.0/16"]
   }
   egress {
     from_port = 0
@@ -264,7 +280,7 @@ resource "aws_instance" "owasp-juice" {
   tags = {
     Name = "owasp-juice"
   }
-    user_data = <<EOF
+  user_data = <<EOF
 #!/bin/bash
 sudo yum install -y docker
 sudo docker pull bkimminich/juice-shop:v12.8.1
