@@ -16,7 +16,7 @@ sudo yum -y install terraform
 curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/terminate.sh && chmod a+x terminate.sh
 
 #Script to add more vms later
-curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvm.sh && chmod a+x addvm.sh && ./addvm.sh
+curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/addvm.sh && chmod a+x addvm.sh
 
 mkdir byuieast
 cd byuieast
@@ -25,7 +25,8 @@ read -p "Choose the type of servers to deploy:
 1. AWS Linux Mate (RDP AND SSH)
 2. Ubuntu Server
 3. AWS Linux Mate and another VM with JuiceBox
-4. Provide a URL to another terraform .tf file
+4. AWS EC2 with RDS MYSQL
+5. Provide a URL to another terraform .tf file
 Enter the number of your choice: " tf_option
 
 case $tf_option in
@@ -39,6 +40,9 @@ case $tf_option in
         tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainbastionjuicebox2.tf"
         ;;
     4)
+        tf_file="https://byui-cloud.github.io/cyber-201-materials/aws-terraform/mainawslinuxwithrdsmysql.tf"
+        ;;        
+    5)
         echo "Look at some .tf files listed here: https://github.com/byui-cloud/cyber-201-materials/tree/main/aws-terraform"
         echo "ex: https://byui-cloud.github.io/cyber-201-materials/aws-terraform/maindebian.tf (user: admin)"
         read -p "Enter the URL to a .tf file: " tf_file

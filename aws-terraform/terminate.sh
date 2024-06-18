@@ -11,12 +11,14 @@ if [ -d "$directory" ]; then
     cd byuieast
     terraform destroy --auto-approve
     rm -R ../byuieast/
-    # Run this if you have a leftover file
-    rm ../terminate.sh
     cd ..
 else
   echo "Directory does not exist."
 fi
+
+# Remove these leftover files
+rm .terminate.sh
+rm .addvm.sh
 
 # Remove if the 201 options was run
 rm build201.sh
