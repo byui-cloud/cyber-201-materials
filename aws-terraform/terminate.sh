@@ -17,8 +17,8 @@ else
 fi
 
 # Remove these leftover files
-rm .terminate.sh
-rm .addvm.sh
+rm terminate.sh
+rm addvm.sh
 
 # Remove if the 201 options was run
 rm build201.sh

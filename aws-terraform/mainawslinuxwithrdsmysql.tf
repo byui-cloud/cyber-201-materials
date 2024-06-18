@@ -27,6 +27,73 @@ resource "aws_key_pair" "server_key" {
   public_key = tls_private_key.priv_key.public_key_openssh
 }
 
+# Create a VPC
+resource "aws_vpc" "team_vpc" {
+  cidr_block = "10.13.0.0/16"
+  instance_tenancy = "default"
+  enable_dns_hostnames = "true"
+  tags = {
+    Name = "team_vpc"
+  }
+}
+
+#Create public subnet on VPC
+resource "aws_subnet" "public_subnet" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  cidr_block = "10.13.0.0/24"
+  map_public_ip_on_launch = "true"
+  tags = {
+    Name = "public_subnet"
+  }
+  availability_zone = "us-east-1a"
+}
+
+#Create private subnet on VPC
+resource "aws_subnet" "private_subnet" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  cidr_block = "10.13.37.0/24"
+  tags = {
+    Name = "private_subnet"
+  }
+  availability_zone = "us-east-1a"
+}
+
+
+#Internet connectivity
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  tags = {
+    Name = "gw"
+  }
+}
+
+#Create route table to push through internet gateway
+resource "aws_route_table" "r" {
+  vpc_id = "${aws_vpc.team_vpc.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.gw.id}"
+  }
+  tags = {
+    Name = "r"
+  }
+}
+
+# Create a new route table for private subnet
+resource "aws_route_table" "private_subnet_route_table" {
+  vpc_id = aws_vpc.team_vpc.id
+
+  tags = {
+    Name = "private_subnet_route_table"
+  }
+}
+
+# Associate the route table with the public subnet
+resource "aws_route_table_association" "public_association" {
+  subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.r.id
+}
+
 # Allow SSH. CIDR blocks must be used or it will not work.
 resource "aws_security_group" "byuisg" {
   name = "allow-ssh"
@@ -66,7 +133,7 @@ resource "aws_security_group" "rds_sg" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.13.0.0/24"]
   }
   egress {
     from_port   = 0
@@ -100,4 +167,7 @@ resource "aws_db_instance" "myinstance" {
   allocated_storage  = 20
   engine_version     = "8.4"
   instance_class     = "db.t2.micro"
+  username           = "admin"
+  password           = "password"
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
 }
