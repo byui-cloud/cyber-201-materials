@@ -1,5 +1,6 @@
 #!/bin/bash
 # deletes the resources
+# curl -O https://byui-cloud.github.io/cyber-201-materials/aws-terraform/deleteeverything.sh && chmod a+x deleteeverything.sh
 # Specify the directory path
 directory="byuieast"
 
