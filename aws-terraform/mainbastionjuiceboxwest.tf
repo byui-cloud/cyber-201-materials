@@ -227,7 +227,7 @@ resource "aws_security_group" "nat_security_group" {
 # Windows Server 2022 Core Base ami-0fdeb49f47e90dd09
 resource "aws_instance" "bastion_host" {
   ami = "ami-0fe551f63319344fa"
-  instance_type = "t3.micro"
+  instance_type = "t3.small"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.bastion.id]

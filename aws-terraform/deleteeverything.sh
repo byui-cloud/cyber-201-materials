@@ -103,7 +103,7 @@ for vpc_id in $vpc_ids; do
     echo "Security Group 'rds_sg' not found in VPC $vpc_id"
   fi
 
-    # Delete Security Group 'rds_sg' if it exists
+    # Delete Security Group 'allow-ssh' if it exists
   allow-ssh_id=$(aws ec2 describe-security-groups --filters "Name=vpc-id,Values=$vpc_id" "Name=group-name,Values=allow-ssh" --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null)
   if [ -n "$allow-ssh_id" ]; then
     echo "Deleting Security Group 'allow-ssh' in VPC $vpc_id"
