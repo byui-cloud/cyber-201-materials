@@ -7,7 +7,6 @@
 # Configure the AWS Provider
 provider "aws" {
   region = "us-east-1"
-  shared_credentials_files = ["../credentials"]
 }
 
 # Create a private key, 4096-bit RSA
@@ -18,7 +17,7 @@ resource "tls_private_key" "priv_key" {
 # Create a security file to ssh in with
 resource "local_file" "private_key_pem" {
   content = tls_private_key.priv_key.private_key_pem
-  filename = "../private_key.pem"
+  filename = "private_key.pem"
   file_permission = 0400
 }
 
