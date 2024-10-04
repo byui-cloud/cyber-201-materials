@@ -3,7 +3,7 @@
 # Create an DC-6 image 
 # Available on http://10.13.37.202 from the bastion host
 resource "aws_instance" "dc-six" {
-  ami = "ami-0dba1827af6cc57be"
+  ami = "ami-00aae31f61b4654e2"
   instance_type = "t2.micro"
   network_interface {
      network_interface_id = "${aws_network_interface.internalnictwo.id}"
