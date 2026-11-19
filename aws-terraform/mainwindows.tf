@@ -63,7 +63,7 @@ data "aws_ssm_parameter" "windows_ami" {
 # Create an EC2 instance Microsoft Windows Server 2025
 resource "aws_instance" "winserver_host" {
   ami = data.aws_ssm_parameter.windows_ami.value
-  instance_type = "t2.micro"
+  instance_type = "t3.small"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.byuisg.id]
   associate_public_ip_address = "true"
