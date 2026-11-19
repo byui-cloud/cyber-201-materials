@@ -218,13 +218,14 @@ resource "aws_security_group" "nat_security_group" {
   }
 }
 
-# Create an EC2 instance running Ubuntu 22.04 LTS 
-# Virginia East ami-007855ac798b5175e
-# Oregon West ami-03f65b8614a860c29
-# Amazon Linux 2 with MATE ami-005b11f8b84489615
-# Windows Server 2022 Core Base ami-0fdeb49f47e90dd09
+# Use AWS's regional public parameter so new instances always use the latest
+# x86_64 Amazon Linux 2023 AMI in the configured region.
+data "aws_ssm_parameter" "amazon_linux_2023" {
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+}
+
 resource "aws_instance" "bastion_host" {
-  ami = "ami-005b11f8b84489615"
+  ami = data.aws_ssm_parameter.amazon_linux_2023.value
   instance_type = "t3.small"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
@@ -235,16 +236,15 @@ resource "aws_instance" "bastion_host" {
   }
   user_data = <<EOF
 #!/bin/bash 
-sudo amazon-linux-extras install firefox
 sudo /bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
 sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
-sudo yum update -y
+sudo dnf update -y
 EOF
 }
 
-# Create an AWS Linux nat instance
+# Create an Amazon Linux 2023 NAT instance
 resource "aws_instance" "owasp-nat" {
-  ami = "ami-005b11f8b84489615"
+  ami = data.aws_ssm_parameter.amazon_linux_2023.value
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
@@ -260,22 +260,18 @@ sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
 sudo sysctl -p /etc/sysctl.conf
 sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/custom-ip-forwarding.conf"
 sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
-sudo yum install iptables-services -y
-sudo systemctl enable iptables
-sudo systemctl start iptables
+sudo dnf install -y iptables-nft
 sudo /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo /sbin/iptables -F FORWARD
-sudo service iptables save
-sudo amazon-linux-extras install firefox
-sudo yum update -y
+sudo dnf update -y
 EOF
   availability_zone = "us-east-1a"
 }
 
-# Create an AWS Linux VM with OWASP Juiceshop app in a docker 
+# Create an Amazon Linux 2023 VM with OWASP Juice Shop in Docker 
 # Available on http://10.13.37.201 from the bastion host
 resource "aws_instance" "owasp-juice" {
-  ami = "ami-005b11f8b84489615"
+  ami = data.aws_ssm_parameter.amazon_linux_2023.value
   instance_type = "t2.micro"
   network_interface {
      network_interface_id = "${aws_network_interface.internalnic.id}"
@@ -287,7 +283,7 @@ resource "aws_instance" "owasp-juice" {
   }
   user_data = <<EOF
 #!/bin/bash
-sudo yum install -y docker
+sudo dnf install -y docker
 sudo docker pull bkimminich/juice-shop:v12.8.1
 sudo systemctl enable docker
 sudo service docker start
