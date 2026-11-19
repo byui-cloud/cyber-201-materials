@@ -3,7 +3,7 @@ data "aws_ssm_parameter" "windows_ami" {
 }
 # Create an EC2 instance Microsoft Windows Server 2025
 resource "aws_instance" "winserver_host" {
-  ami = ami = data.aws_ssm_parameter.windows_ami.value
+  ami = data.aws_ssm_parameter.windows_ami.value
   instance_type = "t2.micro"
   key_name = aws_key_pair.server_key.key_name
   subnet_id = "${aws_subnet.public_subnet.id}"
