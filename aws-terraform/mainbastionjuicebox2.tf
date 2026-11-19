@@ -121,7 +121,7 @@ resource "aws_key_pair" "server_key" {
 
 resource "aws_security_group" "bastion" {
   name = "Bastion"
-  description = "Allow SSH and RDP"
+  description = "Allow SSH and DCV"
   vpc_id = "${aws_vpc.team_vpc.id}"
 # Ingress rule to allow SSH
   ingress {
@@ -134,9 +134,9 @@ resource "aws_security_group" "bastion" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "RDP"
-    from_port = 3389
-    to_port = 3389
+    description = "DCV"
+    from_port = 8443
+    to_port = 8443
     protocol = "tcp"
     # cidr_blocks = ["157.201.0.0/16"]
     cidr_blocks = ["0.0.0.0/0"]
@@ -168,9 +168,9 @@ resource "aws_security_group" "internal" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "RDP"
-    from_port = 3389
-    to_port = 3389
+    description = "DCV"
+    from_port = 8443
+    to_port = 8443
     protocol = "tcp"
     # cidr_blocks = ["157.201.0.0/16"]
     cidr_blocks = ["0.0.0.0/0"]
@@ -227,7 +227,7 @@ data "aws_ssm_parameter" "amazon_linux_2023" {
 
 resource "aws_instance" "bastion_host" {
   ami = data.aws_ssm_parameter.amazon_linux_2023.value
-  instance_type = "t3.small"
+  instance_type = "t3.medium"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
   vpc_security_group_ids = [aws_security_group.bastion.id]
@@ -240,6 +240,15 @@ resource "aws_instance" "bastion_host" {
 sudo /bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
 sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
 sudo dnf update -y
+sudo dnf groupinstall "Desktop" -y
+sudo systemctl set-default graphical.target
+sudo rpm --import https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
+wget https://d1uj6qtbmh3dt5.cloudfront.net/nice-dcv-amzn2023-x86_64.tgz
+tar -xvzf nice-dcv-amzn2023-x86_64.tgz && cd nice-dcv-2026.0-25174-amzn2023-x86_64
+sudo dnf install nice-dcv-server-2026.0.25174-1.amzn2023.x86_64.rpm
+sudo dnf install nice-dcv-web-viewer-2026.0.25174-1.amzn2023.x86_64.rpm
+sudo systemctl enable --now dcvserver
+sudo dcv create-session --type=console --owner ec2-user console
 EOF
 }
 
