@@ -242,13 +242,61 @@ sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
 sudo dnf update -y
 sudo dnf groupinstall "Desktop" -y
 sudo systemctl set-default graphical.target
+
 sudo rpm --import https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
+
 wget https://d1uj6qtbmh3dt5.cloudfront.net/nice-dcv-amzn2023-x86_64.tgz
+
 tar -xvzf nice-dcv-amzn2023-x86_64.tgz && cd nice-dcv-2026.0-25174-amzn2023-x86_64
+
 sudo dnf install nice-dcv-server-2026.0.25174-1.amzn2023.x86_64.rpm
+
 sudo dnf install nice-dcv-web-viewer-2026.0.25174-1.amzn2023.x86_64.rpm
+
 sudo systemctl enable --now dcvserver
+
 sudo dcv create-session --type=console --owner ec2-user console
+
+sudo sed -i 's/^#WaylandEnable=false/WaylandEnable=false/' /etc/gdm/custom.conf
+sudo systemctl restart gdm
+
+
+sudo dnf install -y xorg-x11-drv-dummy
+
+if [ -f /etc/X11/xorg.conf ]; then
+  sudo cp -a /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
+fi
+
+
+sudo tee /etc/X11/xorg.conf >/dev/null <<'EOF'
+Section "Device"
+    Identifier "DummyDevice"
+    Driver "dummy"
+    Option "UseEDID" "false"
+    VideoRam 512000
+EndSection
+
+Section "Monitor"
+    Identifier "DummyMonitor"
+    HorizSync 5.0 - 1000.0
+    VertRefresh 5.0 - 200.0
+    Option "ReducedBlanking"
+EndSection
+
+Section "Screen"
+    Identifier "DummyScreen"
+    Device "DummyDevice"
+    Monitor "DummyMonitor"
+    DefaultDepth 24
+    SubSection "Display"
+        Viewport 0 0
+        Depth 24
+        Virtual 4096 2160
+    EndSubSection
+EndSection
+EOF
+
+sudo systemctl restart gdm
 EOF
 }
 
