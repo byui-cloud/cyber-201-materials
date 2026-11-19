@@ -199,11 +199,12 @@ resource "aws_security_group" "nat_security_group" {
   name        = "nat_security_group"
   description = "Security group for the NAT instance"
   vpc_id = "${aws_vpc.team_vpc.id}"
-  # Allow inbound traffic from the private subnets
+  # Forward traffic from instances in this VPC through the NAT instance.
   ingress {
+    description = "Forwarded VPC traffic"
     from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["10.13.0.0/16"]
   }
 
@@ -248,7 +249,7 @@ resource "aws_instance" "owasp-nat" {
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.public_subnet.id}"
   key_name = aws_key_pair.server_key.key_name
-  vpc_security_group_ids = [aws_security_group.internal.id]
+  vpc_security_group_ids = [aws_security_group.nat_security_group.id]
   # Disable source/destination checks for the NAT instance
   source_dest_check = false
   tags = {
@@ -256,14 +257,41 @@ resource "aws_instance" "owasp-nat" {
   }
   user_data = <<EOF
 #!/bin/bash
-sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
-sudo sysctl -p /etc/sysctl.conf
-sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/custom-ip-forwarding.conf"
-sudo sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf
-sudo dnf install -y iptables-nft
-sudo /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-sudo /sbin/iptables -F FORWARD
-sudo dnf update -y
+set -euxo pipefail
+
+dnf install -y iptables-nft
+cat >/etc/sysctl.d/99-nat-instance.conf <<'SYSCTL'
+net.ipv4.ip_forward = 1
+SYSCTL
+sysctl --system
+
+cat >/usr/local/sbin/configure-nat.sh <<'NAT'
+#!/bin/bash
+set -euo pipefail
+NIC="$(ip -o -4 route show default | awk 'NR == 1 {print $5}')"
+iptables -F FORWARD
+iptables -t nat -F POSTROUTING
+iptables -P FORWARD ACCEPT
+iptables -t nat -A POSTROUTING -o "$NIC" -j MASQUERADE
+NAT
+chmod 0755 /usr/local/sbin/configure-nat.sh
+
+cat >/etc/systemd/system/configure-nat.service <<'UNIT'
+[Unit]
+Description=Configure IPv4 forwarding and NAT rules
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/configure-nat.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now configure-nat.service
 EOF
   availability_zone = "us-east-1a"
 }
