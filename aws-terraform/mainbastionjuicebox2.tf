@@ -235,40 +235,33 @@ resource "aws_instance" "bastion_host" {
   tags = {
     Name = "bastion_host"
   }
-  user_data = <<EOF
-#!/bin/bash 
-sudo /bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
-sudo /bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
-sudo dnf update -y
-sudo dnf groupinstall "Desktop" -y
-sudo systemctl set-default graphical.target
+  user_data = <<USER_DATA
+#!/bin/bash
+set -euxo pipefail
 
-sudo rpm --import https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
+/bin/su -c "echo '10.13.37.202 wordy' >> /etc/hosts"
+/bin/su -c "echo '10.13.37.201 owasp' >> /etc/hosts"
+dnf update -y
+dnf groupinstall "Desktop" -y
+systemctl set-default graphical.target
 
+rpm --import https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
 wget https://d1uj6qtbmh3dt5.cloudfront.net/nice-dcv-amzn2023-x86_64.tgz
+tar -xzf nice-dcv-amzn2023-x86_64.tgz
+cd nice-dcv-2026.0-25174-amzn2023-x86_64
+dnf install -y nice-dcv-server-2026.0.25174-1.amzn2023.x86_64.rpm
+dnf install -y nice-dcv-web-viewer-2026.0.25174-1.amzn2023.x86_64.rpm
+systemctl enable --now dcvserver
 
-tar -xvzf nice-dcv-amzn2023-x86_64.tgz && cd nice-dcv-2026.0-25174-amzn2023-x86_64
+dcv create-session --type=console --owner ec2-user console
+sed -i 's/^#WaylandEnable=false/WaylandEnable=false/' /etc/gdm/custom.conf
 
-sudo dnf install nice-dcv-server-2026.0.25174-1.amzn2023.x86_64.rpm
-
-sudo dnf install nice-dcv-web-viewer-2026.0.25174-1.amzn2023.x86_64.rpm
-
-sudo systemctl enable --now dcvserver
-
-sudo dcv create-session --type=console --owner ec2-user console
-
-sudo sed -i 's/^#WaylandEnable=false/WaylandEnable=false/' /etc/gdm/custom.conf
-sudo systemctl restart gdm
-
-
-sudo dnf install -y xorg-x11-drv-dummy
-
+dnf install -y xorg-x11-drv-dummy
 if [ -f /etc/X11/xorg.conf ]; then
-  sudo cp -a /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
+  cp -a /etc/X11/xorg.conf /etc/X11/xorg.conf.bak
 fi
 
-
-sudo tee /etc/X11/xorg.conf >/dev/null <<'EOF'
+tee /etc/X11/xorg.conf >/dev/null <<'XORG_CONF'
 Section "Device"
     Identifier "DummyDevice"
     Driver "dummy"
@@ -294,11 +287,13 @@ Section "Screen"
         Virtual 4096 2160
     EndSubSection
 EndSection
-EOF
+XORG_CONF
 
-sudo systemctl restart gdm
-EOF
+systemctl restart gdm
+USER_DATA
+  availability_zone = "us-east-1a"
 }
+
 
 # Create an Amazon Linux 2023 NAT instance
 resource "aws_instance" "owasp-nat" {
